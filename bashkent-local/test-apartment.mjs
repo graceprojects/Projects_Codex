@@ -1,0 +1,28 @@
+import {JSDOM} from '/private/tmp/haven-plan-tests/node_modules/jsdom/lib/api.js';
+import fs from 'node:fs/promises';import assert from 'node:assert/strict';import path from 'node:path';
+const root=path.resolve('bashkent-local/site');
+const dom=new JSDOM(await fs.readFile(root+'/apartment.html','utf8'),{url:'http://localhost:8080/apartment.html'});
+const css=dom.window.document.createElement('style');css.textContent=await fs.readFile(root+'/apartment.css','utf8');dom.window.document.head.append(css);
+globalThis.window=dom.window;globalThis.MutationObserver=dom.window.MutationObserver;globalThis.document=dom.window.document;globalThis.DOMPoint=class{constructor(x,y){this.x=x;this.y=y}matrixTransform(){return this}};
+dom.window.HTMLDialogElement.prototype.showModal=function(){this.open=true};dom.window.HTMLDialogElement.prototype.close=function(){this.open=false};
+globalThis.fetch=async url=>({ok:true,json:async()=>JSON.parse(await fs.readFile(path.join(root,url),'utf8'))});
+await import('./site/apartment.js');
+for(let n=0;n<50&&!document.querySelector('#plan-svg svg');n++)await new Promise(r=>setTimeout(r,20));
+const $=s=>document.querySelector(s),click=s=>$(s).dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true}));
+assert.equal(document.querySelectorAll('.room-row').length,7);assert.ok($('#plan-svg svg'));
+assert.ok(document.querySelectorAll('.cad-architecture path').length>1000);
+assert.equal($('#furniture-toggle').getAttribute('aria-pressed'),'true');click('#furniture-toggle');assert.ok($('#plan-svg').classList.contains('no-furniture'));assert.equal(dom.window.getComputedStyle($('.cad-furniture')).display,'none');click('#furniture-toggle');assert.ok(!$('#plan-svg').classList.contains('no-furniture'));assert.notEqual(dom.window.getComputedStyle($('.cad-furniture')).display,'none');
+click('#dimensions-toggle');assert.ok($('#plan-svg').classList.contains('no-dimensions'));click('#dimensions-toggle');assert.ok(!$('#plan-svg').classList.contains('no-dimensions'));
+click('.room-row[data-room="bedroom"]');assert.match($('#viewer-status').textContent,/3,45 × 4,15/);assert.equal($('.room-row[data-room="bedroom"]').getAttribute('aria-pressed'),'true');
+assert.equal($('#room-focus').hidden,false);click('#clear-room');assert.equal($('#room-focus').hidden,true);click('#context-toggle');assert.equal($('#context-toggle').getAttribute('aria-expanded'),'true');click('#context-toggle');assert.equal($('#context-toggle').getAttribute('aria-expanded'),'false');click('#drawing-toggle');assert.ok(!$('#plan-svg').classList.contains('presentation'));click('#drawing-toggle');assert.ok($('#plan-svg').classList.contains('presentation'));
+const vb=$('#plan-svg svg').getAttribute('viewBox');click('#zoom-in');assert.notEqual($('#plan-svg svg').getAttribute('viewBox'),vb);click('#zoom-reset');assert.equal($('#plan-svg svg').getAttribute('viewBox'),vb);
+for(const id of ['A1','A2','A3','A4','A5','A6','C1','C2','C3','C4','C5']){click(`#site-diagram [data-block="${id}"]`);assert.ok($('#complex-dialog').open);assert.equal($('#block-title').textContent,`Секция ${id}`);click('#complex-dialog .dialog-close');assert.ok(!$('#complex-dialog').open)}
+click('.source-trigger');assert.ok($('#source-dialog').open);click('#source-dialog .dialog-close');click('#light-trigger');assert.ok($('#light-dialog').open);click('#light-dialog .dialog-close');
+click('#ruler-toggle');const svg=$('#plan-svg svg');svg.setPointerCapture=()=>{};svg.getScreenCTM=()=>({inverse:()=>({})});
+function point(x,y){for(const type of ['pointerdown','pointerup']){const e=new dom.window.Event(type,{bubbles:true});Object.assign(e,{button:0,clientX:x,clientY:y,pointerId:1});svg.dispatchEvent(e)}}point(905.8,389);point(964.48,389);assert.match($('#viewer-status').textContent,/3.20 м/);click('#ruler-clear');assert.equal($('#ruler-overlay').innerHTML,'');click('#ruler-toggle');
+assert.ok($('.details-actions a').href.startsWith('blob:'));
+const blob=await (await import('node:buffer')).resolveObjectURL($('.details-actions a').href).text();await fs.writeFile(root+'/assets/plans/a3-plan.svg',blob);
+const {rooms,blocks}=await import('./site/apartment-data.js');assert.equal(Math.round(rooms.filter(r=>r.id!=='balcony').reduce((s,r)=>s+Number(r.area.replace(',','.')),0)*100),4925);assert.equal(new Set(blocks.map(b=>b.id)).size,11);
+const room=rooms.find(r=>r.id==='living');assert.ok(Math.abs((room.poly[1][0]-room.poly[0][0])-320)<.2);assert.ok(Math.abs((room.poly[2][1]-room.poly[1][1])-545)<.2);
+console.log('PASS: CAD layers, 7 rooms, areas, dimensional calibration, furniture off/on, dimensions off/on, room selection, zoom/reset, 11 section dialogs, source/light dialogs, two-point ruler (3.20 m), SVG export.');
+console.log('Not covered: browser rendering, pointer coordinate transforms in real browsers, WebGL, fullscreen.');
