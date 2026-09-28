@@ -1,0 +1,26 @@
+.DS_Store
+**/__pycache__/
+**/*.pyc
+**/node_modules/
+**/.venv/
+**/.env
+**/.env.*
+**/*.pem
+**/*.key
+**/*.p12
+**/*.log
+
+# Local working files and backups
+/tmp/
+/output/backups/
+/output/apartment-sites-research-2026-09-28/*.png
+/output/apartment-sites-research-2026-09-28/*.jpg
+/bashkent-local/original-site-backup.zip
+/_brand_preview/
+
+# Source design packages kept locally; this GitHub repository is public.
+/2025.06.05 A-C Blok Project/
+/*.rar
+/26.08.10.Hills By Bashkent Mix Used.pdf
+/Haven. Guidebook.pdf
+/pdf/
