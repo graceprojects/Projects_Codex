@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F4EFE8">
+  <title>HAVEN — дом, где начинается тишина</title>
+  <meta name="description" content="Исследуйте HAVEN: выберите корпус, этаж и посмотрите планировку.">
+  
+  
+  
+  <link rel="stylesheet" href="fonts.css?v=haven-1">
+  <link rel="stylesheet" href="styles.css?v=haven-1">
+  <link rel="stylesheet" href="haven.css?v=3">
+  <link rel="icon" type="image/svg+xml" href="assets/brand/haven-symbol.svg">
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+  <script src="script.js?v=haven-1" defer></script>
+  <script src="map2d.js?v=haven-1" defer></script>
+</head>
+<body class="is-loading">
+  <div id="loader" class="loader" aria-live="polite" aria-label="Загрузка">
+    <div class="loader-curtain top"></div><div class="loader-curtain bottom"></div>
+    <div class="loader-inner">
+      <img class="loader-logo" src="assets/brand/haven-logo.svg" alt="HAVEN — Halovat makoni" width="270" height="180">
+      <div class="loader-word">ИСКУССТВО БЫТЬ ДОМА</div>
+      <div class="loader-bar"><i id="loader-bar"></i></div>
+      <div class="loader-meta"><span>ТАШКЕНТ · 41°N 69°E</span><span><b id="loader-pct">0</b>%</span></div>
+    </div>
+  </div>
+  <div id="app">
+    <header class="header">
+      <a class="brand" href="#top" aria-label="HAVEN — наверх"><img class="haven-logo" src="assets/brand/haven-logo.svg" alt="HAVEN — Halovat makoni" width="150" height="100"></a>
+      <nav class="haven-nav" aria-label="Основная навигация"><a href="#about">О проекте</a><a href="#hscroll">Галерея</a><a href="apartment.html">Планировки</a><a href="#location">Расположение</a></nav><a class="haven-header-cta" href="apartment.html?view=complex">Выбрать квартиру <span aria-hidden="true">↗</span></a></header>
+
+    <main id="top">
+      <section class="intro" aria-labelledby="hero-title">
+        <div class="intro-image" role="img" aria-label="Архитектура резиденций HAVEN"><span class="haven-image-caption">HAVEN / ТАШКЕНТ</span></div><div class="haven-hero-lines" aria-hidden="true"></div>
+        <div class="intro-shade"></div>
+        <div class="intro-content">
+          <p class="eyebrow"><span class="eyebrow-line"></span> РЕЗИДЕНЦИИ В ТАШКЕНТЕ</p>
+          <h1 id="hero-title"><span class="ln"><span>Дом, где</span></span><span class="ln"><span>начинается</span></span><span class="ln"><span><em>тишина.</em></span></span></h1>
+          <p class="intro-copy">Город остаётся за порогом. Внутри — свет, пространство и время для самого важного.</p>
+          <a class="intro-cta" href="apartment.html?view=complex"><span>Найти свой дом</span><span class="arrow-circle">↘</span></a>
+        </div>
+        <div class="intro-bottom"><span>HALOVAT MAKONI</span><span>МЕСТО ВАШЕГО СПОКОЙСТВИЯ</span><a href="#about" aria-label="Узнать о проекте">↓</a></div>
+      </section>
+
+      <section class="plan-preview-entry" aria-labelledby="plan-preview-title"><div><span class="eyebrow">НОВЫЙ РАЗДЕЛ · ОДНА КВАРТИРА</span><h2 id="plan-preview-title">От места в комплексе<br>до пространства внутри.</h2><p>Секция A3 · тип 44 · трёхкомнатная с балконом</p></div><a href="apartment.html">Посмотреть планировку <span>↗</span></a></section>
+
+      <section id="explore" class="experience" aria-label="Интерактивный выбор корпуса">
+        <div class="experience-sticky">
+          <div class="video-poster" aria-hidden="true"></div>
+          <video id="orbit-video" muted playsinline preload="auto" poster="assets/frames/left-0.jpg" aria-label="Облёт жилого комплекса"></video>
+          <div class="video-vignette"></div>
+          <div class="cine-bar top" aria-hidden="true"></div><div class="cine-bar bottom" aria-hidden="true"></div><div class="cine-flash" aria-hidden="true"></div>
+          <div id="scene-index" class="scene-index" aria-hidden="true">01</div>
+          <svg id="building-outline" class="building-outline" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice" aria-label="Выбранный корпус" role="img">
+            <defs><filter id="line-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="4"/></filter><clipPath id="floor-clip"><path id="floor-clip-path" d=""></path></clipPath></defs>
+            <path class="outline-glow" d=""></path><path class="outline-fill" d=""></path><path class="outline-line" d=""></path>
+            <g id="floor-bands" class="floor-bands" clip-path="url(#floor-clip)"></g><path id="outline-hit" class="outline-hit" d=""></path><g id="alt-hits" class="alt-hits"></g>
+          </svg>
+          <div id="alt-targets" class="alt-targets"></div>
+          <div id="floor-hover-label" class="floor-hover-label" aria-hidden="true"></div>
+          <div class="screen-top"><span class="screen-kicker">HAVEN <i></i> ИНТЕРАКТИВНЫЙ ОБЗОР</span><span id="view-counter">01 / 03</span></div>
+          <div class="scene-copy" id="scene-copy" aria-live="polite">
+            <span class="scene-kicker">01 — АРХИТЕКТУРА</span>
+            <h2>Выберите<br><em>свою высоту.</em></h2>
+            <p>Три характера одного места. Остановитесь на корпусе и откройте его планировки.</p>
+          </div>
+          <button id="outline-target" class="outline-target" type="button" aria-label="Выбрать выделенный корпус"><span class="target-ring">+</span><span id="target-label">КОРПУС A</span></button>
+          <div class="scene-actions">
+            <button id="select-building" class="primary-action" type="button">Выбрать корпус <span>↗</span></button>
+            <span class="scene-hint">Нажмите на контур или кнопку</span>
+          </div>
+          <div class="route-nav" aria-label="Точки маршрута">
+            <div class="route-line"><span id="route-progress"></span></div>
+            <button class="route-dot active" data-stop="0" type="button" aria-label="Перейти к корпусу A"><span class="dot-ring"></span><span class="dot-text">01 <strong>Корпус A</strong></span></button>
+            <button class="route-dot" data-stop="1" type="button" aria-label="Перейти к корпусу B"><span class="dot-ring"></span><span class="dot-text">02 <strong>Корпус B</strong></span></button>
+            <button class="route-dot" data-stop="2" type="button" aria-label="Перейти к башне C"><span class="dot-ring"></span><span class="dot-text">03 <strong>Башня C</strong></span></button>
+          </div>
+          <div class="orbit-arrows" role="group" aria-label="Облёт камеры"><button id="orbit-prev" class="orbit-arrow" type="button" aria-label="Предыдущий корпус"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><span class="orbit-count"><b id="orbit-now">01</b> / 03</span><button id="orbit-next" class="orbit-arrow" type="button" aria-label="Следующий корпус"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div>
+          <div class="scroll-caption"><span>ПРОКРУТИТЕ ДЛЯ СЛЕДУЮЩЕГО КОРПУСА</span><span>↓</span></div>
+        </div>
+        <div class="scroll-stop" data-index="0"></div><div class="scroll-stop" data-index="1"></div><div class="scroll-stop" data-index="2"></div>
+      </section>
+
+      <section id="about" class="manifesto" aria-label="О проекте">
+        <p class="eyebrow dark reveal">01 / ФИЛОСОФИЯ HAVEN</p>
+        <p class="manifesto-text" id="manifesto-text">Дом — это больше, чем пространство. Это тишина за порогом, мягкий утренний свет и ощущение, что вы на своём месте.</p>
+      <div class="haven-about-bottom"><span>HALOVAT MAKONI</span><p>HAVEN объединяет архитектуру, городские виды и пространства для повседневной жизни. Изучите проект и выберите свой ритм.</p></div></section>
+
+      <section class="stats" aria-label="Цифры проекта">
+        <div class="stat reveal"><strong data-count="28">0</strong><span>этажей в башне</span></div>
+        <div class="stat reveal"><strong data-count="3">0</strong><span>корпуса ансамбля</span></div>
+        <div class="stat reveal"><strong data-count="54">0</strong><span>жилых этажа всего</span></div>
+        <div class="stat reveal"><strong data-count="360" data-suffix="°">0</strong><span>панорама с крыши</span></div>
+      </section>
+
+      <div class="marquee" aria-hidden="true"><div class="marquee-track"><span>HAVEN · HALOVAT MAKONI · ИСКУССТВО БЫТЬ ДОМА · </span><span>HAVEN · HALOVAT MAKONI · ИСКУССТВО БЫТЬ ДОМА · </span></div></div>
+
+      <section class="hscroll" id="hscroll" aria-label="Галерея">
+        <div class="hscroll-sticky">
+          <div class="hscroll-head"><p class="eyebrow">02 / ЖИЗНЬ В HAVEN</p><h2>Красота<br><em>каждого дня.</em></h2><div class="hscroll-progress"><i id="hscroll-bar"></i></div></div>
+          <div class="hscroll-track" id="hscroll-track"><figure class="h-card"><div class="h-img"><img src="assets/gallery/g1.jpg" alt="Терраса на крыше" loading="lazy"></div><figcaption><span>01</span><strong>Терраса на крыше</strong><em>Закаты над Ташкентом — каждый вечер</em></figcaption></figure><figure class="h-card"><div class="h-img"><img src="assets/gallery/g2.jpg" alt="Ресторан в сфере" loading="lazy"></div><figcaption><span>02</span><strong>Ресторан в сфере</strong><em>Ужин над огнями города</em></figcaption></figure><figure class="h-card"><div class="h-img"><img src="assets/gallery/g3.jpg" alt="Прогулочный бульвар" loading="lazy"></div><figcaption><span>03</span><strong>Прогулочный бульвар</strong><em>Зелёные маршруты у дома</em></figcaption></figure><figure class="h-card"><div class="h-img"><img src="assets/gallery/g4.jpg" alt="Деловой квартал" loading="lazy"></div><figcaption><span>04</span><strong>Деловой квартал</strong><em>Офисы и лобби в одном ансамбле</em></figcaption></figure><figure class="h-card"><div class="h-img"><img src="assets/gallery/g5.jpg" alt="Панорамные лоджии" loading="lazy"></div><figcaption><span>05</span><strong>Панорамные лоджии</strong><em>Город как часть интерьера</em></figcaption></figure><figure class="h-card"><div class="h-img"><img src="assets/gallery/g6.jpg" alt="Архитектурный ансамбль" loading="lazy"></div><figcaption><span>06</span><strong>Архитектурный ансамбль</strong><em>Три характера — один язык</em></figcaption></figure><figure class="h-card"><div class="h-img"><img src="assets/gallery/g7.jpg" alt="Вечер в сфере" loading="lazy"></div><figcaption><span>07</span><strong>Вечер в сфере</strong><em>Огни города у ваших ног</em></figcaption></figure><figure class="h-card"><div class="h-img"><img src="assets/gallery/g8.jpg" alt="Силуэт" loading="lazy"></div><figcaption><span>08</span><strong>Силуэт</strong><em>Новая доминанта горизонта</em></figcaption></figure></div>
+        </div>
+      </section>
+
+      <section class="m2-section" id="location" aria-labelledby="m2-title">
+        <div class="m2-head">
+          <div>
+            <p class="eyebrow dark"><span class="eyebrow-line"></span> 03 / ГОРОД РЯДОМ</p>
+            <h2 id="m2-title">Ваш город.<br><em>Вокруг вашего дома.</em></h2>
+          </div>
+          <div class="m2-head-side">
+            <p class="m2-lead">Телебашня, Японский сад, метро и парки — рядом с домом. Нажмите на точку, чтобы увидеть маршрут пешком.</p>
+            <a class="m2-open3d" href="map3d.html">3D-карта района <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <div class="m2-map" id="map2d" data-base="assets/map2d/">
+          <div class="m2-stage"></div>
+          <aside class="m2-pop" hidden aria-live="polite">
+            <button class="m2-pop-close" type="button" aria-label="Закрыть">×</button>
+            <span class="m2-pop-n">01</span>
+            <h3 class="m2-pop-title"></h3>
+            <p class="m2-pop-cat"></p>
+            <p class="m2-pop-meta"></p>
+          </aside>
+          <div class="m2-zoom"><button class="m2-zoom-in" type="button" aria-label="Приблизить">+</button><button class="m2-zoom-out" type="button" aria-label="Отдалить">−</button></div>
+          <a class="m2-3dbtn" href="map3d.html">Смотреть в 3D <span aria-hidden="true">↗</span></a>
+          <p class="m2-hintbox">Чтобы изменить масштаб, используйте ⌘ / Ctrl + колесо или кнопки</p>
+        </div>
+      </section>
+
+      <section class="after" aria-labelledby="after-title"><div><p class="eyebrow dark">ВАШЕ ПРОСТРАНСТВО В HAVEN</p><h2 id="after-title">Найдите дом,<br><em>близкий вам.</em></h2></div><a href="apartment.html?view=complex">Выбрать квартиру <span>↗</span></a></section>
+    </main>
+    <footer class="haven-footer"><a href="#top" class="haven-footer-brand" aria-label="HAVEN — наверх"><img src="assets/brand/haven-logo.svg" alt="HAVEN — Halovat makoni" width="210" height="140"></a><div class="haven-footer-copy"><p>Место вашего спокойствия.</p><span>Ташкент, Узбекистан</span></div><nav aria-label="Навигация в подвале"><a href="#about">О проекте</a><a href="apartment.html?view=complex">Выбор квартиры</a><a href="#hscroll">Галерея</a><a href="#location">Расположение</a></nav><div class="haven-footer-bottom"><span>© 2026 HAVEN</span><span>HALOVAT MAKONI</span><a href="#top">Наверх ↑</a></div></footer>
+
+    <div id="selector" class="selector" aria-hidden="true">
+      <div class="selector-backdrop" data-close></div>
+      <aside class="selector-panel" role="dialog" aria-modal="true" aria-labelledby="selector-title">
+        <div class="panel-top"><span>ВЫБОР ПРОСТРАНСТВА / <span id="panel-count">01</span></span><button class="icon-close" data-close type="button" aria-label="Закрыть">×</button></div>
+        <div class="panel-content"><p class="eyebrow dark">HAVEN</p><h2 id="selector-title">Корпус A</h2><p id="building-description" class="building-description"></p><div class="panel-divider"></div><div class="stat-row"><div><span>ЭТАЖЕЙ</span><strong id="building-floors">12</strong></div><div><span>ФОРМАТ</span><strong id="building-format">Резиденции</strong></div></div><div class="panel-divider"></div><div class="floor-heading"><div><span class="section-num">01 / ВЫБОР ЭТАЖА</span><h3>Выберите этаж</h3></div><span id="selected-floor-caption">Этаж 06</span></div><div id="floor-list" class="floor-list" role="group" aria-label="Этажи"></div><button id="open-plan" class="panel-main-button" type="button">Смотреть планировку <span>↗</span></button><p class="panel-small">Планировки представлены как концепт. Точные размеры и наличие будут добавлены позже.</p></div>
+      </aside>
+    </div>
+
+    <div id="plan-modal" class="plan-modal" aria-hidden="true"><div class="plan-backdrop" data-close-plan></div><section class="plan-panel" role="dialog" aria-modal="true" aria-labelledby="plan-title"><div class="plan-header"><div><span class="section-num">HAVEN / ПЛАНИРОВКА</span><h2 id="plan-title">Корпус A · Этаж 06</h2></div><button class="icon-close" data-close-plan type="button" aria-label="Закрыть">×</button></div><div class="plan-content"><div class="plan-graphic"><div id="floorplan-render"></div><div class="plan-view-switch" role="group" aria-label="Вид планировки"><button type="button" id="plan-block" class="plan-toggle" aria-pressed="false" title="Показать квартиру в составе этажа"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="M9 5v14M3 12h6"/></svg>Блок</button><button type="button" id="plan-furn" class="plan-toggle active" aria-pressed="true" title="Показать или скрыть мебель"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3M3 11h18v5H3zM5 16v2M19 16v2"/></svg>Мебель</button><button type="button" id="plan-compass" class="plan-toggle active" aria-pressed="true" title="Показать или скрыть компас"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>Компас</button><button type="button" id="plan-sun" class="plan-info plan-sun" aria-pressed="false" aria-label="Показать, как падает свет" title="Как падает свет">☀</button><button type="button" id="plan-info" class="plan-info" aria-pressed="false" aria-label="Показать подписи комнат" title="Подписи комнат">i</button><button type="button" class="active" data-view="3d">3D</button><button type="button" data-view="top">Сверху</button><button type="button" data-view="reset" aria-label="Сбросить поворот">↺</button></div><div id="block-mini" class="block-mini" role="button" tabindex="0" aria-label="Ваш блок: нажмите, чтобы раскрыть и посмотреть этаж" hidden><div class="bm-canvas"></div><div class="bm-cap"><b>ВАШ БЛОК</b><span id="bm-sub"></span><em>Нажмите, чтобы раскрыть</em></div><button id="bm-cut" class="bm-cut" type="button" aria-pressed="false">✂ Разрез по этажу</button><button class="bm-close" type="button" aria-label="Свернуть">×</button></div><div class="compass2d" aria-label="Компас: север и направление на Киблу" role="img"><div class="compass-dial" id="compass-dial"><svg viewBox="-50 -50 100 100" aria-hidden="true"><circle r="46" fill="rgba(255,255,255,.92)" stroke="#243b3c" stroke-width="1.5"/><g stroke="#243b3c" stroke-width="1" opacity=".5"><line x1="0" y1="-46" x2="0" y2="-38" transform="rotate(0)"/><line x1="0" y1="-46" x2="0" y2="-41" transform="rotate(30)"/><line x1="0" y1="-46" x2="0" y2="-41" transform="rotate(60)"/><line x1="0" y1="-46" x2="0" y2="-38" transform="rotate(90)"/><line x1="0" y1="-46" x2="0" y2="-41" transform="rotate(120)"/><line x1="0" y1="-46" x2="0" y2="-41" transform="rotate(150)"/><line x1="0" y1="-46" x2="0" y2="-38" transform="rotate(180)"/><line x1="0" y1="-46" x2="0" y2="-41" transform="rotate(210)"/><line x1="0" y1="-46" x2="0" y2="-41" transform="rotate(240)"/><line x1="0" y1="-46" x2="0" y2="-38" transform="rotate(270)"/><line x1="0" y1="-46" x2="0" y2="-41" transform="rotate(300)"/><line x1="0" y1="-46" x2="0" y2="-41" transform="rotate(330)"/></g><text y="-26" text-anchor="middle" font-size="12" font-weight="800" fill="#b3362b">С</text><text x="28" y="4" text-anchor="middle" font-size="10" font-weight="800" fill="#243b3c">В</text><text y="34" text-anchor="middle" font-size="10" font-weight="800" fill="#243b3c">Ю</text><text x="-28" y="4" text-anchor="middle" font-size="10" font-weight="800" fill="#243b3c">З</text><path d="M0 -22 L5 0 L0 4 L-5 0Z" fill="#b3362b"/><path d="M0 22 L5 0 L0 -4 L-5 0Z" fill="#9aa39f"/><g transform="rotate(240.3)"><line x1="0" y1="0" x2="0" y2="-38" stroke="#b88a45" stroke-width="2.5" stroke-dasharray="4 2.5"/><rect x="-5" y="-47" width="10" height="10" rx="1" fill="#111"/><rect x="-5" y="-44" width="10" height="2" fill="#c9a24a"/></g><circle r="3" fill="#243b3c"/></svg></div><div class="compass-caption"><b>Кибла 240°</b><span>ЗЮЗ от севера</span></div></div>
+          <div id="sun-panel" class="sun-panel" hidden><button id="sun-play" class="sun-play" type="button" aria-label="Проиграть день">▶</button><div class="sun-track"><div class="sun-seasons" role="group" aria-label="Время года"><button type="button" data-doy="355" data-season="winter" aria-pressed="false">❄ Зима</button><button type="button" data-doy="80" data-season="spring" aria-pressed="false">Весна</button><button type="button" data-doy="172" data-season="summer" aria-pressed="false">☀ Лето</button><button type="button" data-doy="266" data-season="autumn" aria-pressed="false">Осень</button><button type="button" data-doy="today" data-season="today" class="active" aria-pressed="true">Сегодня</button></div><input id="sun-time" type="range" min="0" max="24" step="0.05" value="15" aria-label="Время суток"><div class="sun-scale"><span>0:00</span><span>6:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div></div><div class="sun-info"><strong id="sun-label">15:00</strong><span id="sun-times" class="sun-times">—</span><span id="sun-dir">Солнце на ЮЗ</span></div></div><span class="plan-watermark">3D · ПОТЯНИТЕ, ЧТОБЫ ПОВЕРНУТЬ · КОЛЕСО — ПРИБЛИЖЕНИЕ</span></div><div class="plan-details">
+          <span class="section-num" id="apt-kicker">КОРПУС A · ПОДЪЕЗД 1 · ЭТАЖ 06</span>
+          <h3 id="plan-subtitle">Кв. № 01</h3>
+          <div class="apt-area"><strong id="apt-area">0</strong> м² <span>·</span> <span id="apt-rooms">4</span>-комнатная</div>
+          <div class="apt-price"><span>Стоимость квартиры</span><strong id="apt-total">—</strong><em id="apt-ppm">—</em></div>
+          <div class="apt-pay">
+            <div class="detail-row"><span>При 100% оплате <b id="apt-disc-pct">−5%</b></span><strong id="apt-discount">—</strong></div>
+            <div class="detail-row"><span>Первоначальный взнос <b id="apt-down-pct">30%</b></span><strong id="apt-down">—</strong></div>
+            <div class="detail-row"><span>Ежемесячно, <b id="apt-months">24</b> мес.</span><strong id="apt-monthly">—</strong></div>
+          </div>
+          <div class="apt-location"><div class="loc-head"><span class="section-num">РАСПОЛОЖЕНИЕ В БЛОКЕ</span></div><div class="loc-body"><div id="apt-location-svg" class="loc-plate"></div><div id="apt-elev" class="loc-elev"></div></div><p id="apt-location-note" class="loc-note"></p><p id="apt-views" class="loc-views"></p></div>
+          <details class="apt-rooms" open><summary>Экспликация помещений</summary><ul id="apt-room-list"></ul></details>
+          <div class="apt-meta">
+            <div class="detail-row"><span>Корпус</span><strong id="detail-building">A</strong></div>
+            <div class="detail-row"><span>Этаж</span><strong id="detail-floor">06</strong></div>
+            <div class="detail-row"><span>Квартир на этаже</span><strong id="detail-apartments">6</strong></div>
+            <div class="detail-row"><span>Сдача дома</span><strong id="apt-handover">—</strong></div>
+            <div class="detail-row"><span>Дата печати</span><strong id="apt-printed">—</strong></div>
+            <div class="detail-row"><span>Бронь до</span><strong id="apt-booking">—</strong></div>
+          </div>
+          <p class="apt-note">*Цена фиксируется на момент заключения договора. <span id="apt-sample-note">Цены и сроки указаны как пример.</span></p>
+          <button id="open-ar" class="ar-button" type="button"><span>Смотреть в AR</span><span>◈</span></button>
+          <button id="open-pano" class="tour-button" type="button"><span>Смотреть 360°</span><span>◎</span></button>
+          <button id="print-card" class="pdf-button" type="button"><span>Скачать карточку PDF</span><span>↓</span></button>
+          <p class="plan-note">Панорама из окна: потяните мышью или пальцем, чтобы осмотреться вокруг.</p>
+        </div></div></section></div>
+    <div id="ar-modal" class="ar-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Планировка в дополненной реальности">
+      <div class="ar-top"><div><span class="section-num">HAVEN / AR</span><strong id="ar-title">Планировка в AR</strong></div><button class="icon-close ar-close" data-close-ar type="button" aria-label="Закрыть">×</button></div>
+      <div id="ar-stage" class="ar-stage"></div>
+      <div class="ar-bottom"><p id="ar-status" class="ar-status">Готовим 3D-модель…</p><button id="ar-launch" class="ar-launch" type="button" disabled>Разместить в комнате <span>◈</span></button></div>
+    </div>
+    <div id="pano-modal" class="pano-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Панорама 360°">
+      <canvas id="pano-canvas"></canvas>
+      <div class="pano-top"><div><span class="section-num">HAVEN / ПАНОРАМА 360°</span><strong id="pano-title">Вид из окна</strong></div><button class="icon-close pano-close" data-close-pano type="button" aria-label="Закрыть панораму">×</button></div>
+      <div class="pano-hint"><span>⟲</span> Потяните, чтобы осмотреться · колесо — приближение</div>
+      <div class="pano-loading">Загрузка панорамы…</div>
+    </div>
+  </div>
+</body>
+</html>
